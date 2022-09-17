@@ -1,0 +1,89 @@
+package LStrings;
+//Problem Description
+//You are given two strings, A and B, of size N and M, respectively.
+//
+//You have to find the count of all permutations of A present in B as a substring. You can assume a string will have only lowercase letters.
+//
+//
+//
+//Problem Constraints
+//1 <= N < M <= 105
+//
+//
+//
+//Input Format
+//Given two arguments, A and B of type String.
+//
+//
+//
+//Output Format
+//Return a single integer, i.e., number of permutations of A present in B as a substring.
+//
+//
+//
+//Example Input
+//Input 1:
+//
+// A = "abc"
+// B = "abcbacabc"
+//Input 2:
+//
+// A = "aca"
+// B = "acaa"
+//
+//
+//Example Output
+//Output 1:
+//
+// 5
+//Output 2:
+//
+// 2
+//
+//
+//Example Explanation
+//Explanation 1:
+//
+// Permutations of A that are present in B as substring are:
+//    1. abc
+//    2. cba
+//    3. bac
+//    4. cab
+//    5. abc
+//    So ans is 5.
+//Explanation 2:
+//
+// Permutations of A that are present in B as substring are:
+//    1. aca
+//    2. caa 
+public class Solution {
+    public int solve(String A, String B) {
+        HashMap <Character, Integer> dict = new HashMap<Character, Integer>();
+        HashMap <Character, Integer> window_Counter = new HashMap<Character, Integer>();
+        int ans =0;
+        if (B.length()<A.length()) return 0;
+        for (int i=0; i<A.length(); i++){//A is the smaller string
+            int freq = dict.getOrDefault(A.charAt(i), 0); //if element already exists in map or not, if not default tp 0 
+            dict.put(A.charAt(i), freq+1); //update with +1
+        }
+        //int i = 0;//start index of window
+        int permutations=0; //
+        for (int j=0; j<B.length(); j++){
+            window_Counter.put(B.charAt(j), window_Counter.getOrDefault(B.charAt(j),0)+1); //update element freq or default to 0, then +1
+            //System.out.println(window_Counter.get(B.charAt(j)));
+            if(j>=A.length()){
+                window_Counter.put(B.charAt(j-A.length()), window_Counter.get(B.charAt(j-A.length()))-1);
+                if(window_Counter.get(B.charAt(j-A.length()))==0)
+                    window_Counter.remove(B.charAt(j-A.length()));
+            }   
+            permutations++;
+            for(char c: dict.keySet()){
+                if (!window_Counter.containsKey(c) || window_Counter.get(c)<dict.get(c)){
+                    permutations--;
+                    break;
+                }
+            }
+        }
+        return permutations;
+    }
+}
