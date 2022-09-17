@@ -1,0 +1,109 @@
+// Q. Boring String
+//Problem Description
+//You are given a string A of lowercase English alphabets. Rearrange the characters of the given string A such that there is no boring substring in A.
+//
+//A boring substring has the following properties:
+//
+//Its length is 2.
+//Both the characters are consecutive, for example - "ab", "cd", "dc", "zy" etc.(If the first character is C then the next character can be either (C+1) or (C-1)).
+//Return 1 if it is possible to rearrange the letters of A such that there are no boring substrings in A else, return 0.
+//
+//
+//
+//Problem Constraints
+//1 <= |A| <= 105
+//
+//
+//
+//Input Format
+//The only argument given is a string A.
+//
+//
+//
+//Output Format
+//Return 1 if it is possible to rearrange the letters of A such that there are no boring substrings in A else, return 0.
+//
+//
+//
+//Example Input
+//Input 1:
+//
+// A = "abcd"
+//Input 2:
+//
+// A = "aab"
+//
+//
+//Example Output
+//Output 1:
+//
+// 1
+//Output 2:
+//
+// 0
+//
+//
+//Example Explanation
+//Explanation 1:
+//
+// String A can be rearranged into "cadb" or "bdac" 
+//Explanation 2:
+//
+// No arrangement of string A can make it free of boring substrings.
+//
+//
+//
+//See Expected Output
+//Java 8 (Array Support)
+//12345678910111213141516171819202122
+//}
+//
+//Test Output
+//TestTest With Custom Input
+
+public class Solution {
+/*You are given a string A of lowercase English alphabets. Rearrange the characters of the given string A such that there is no boring substring in A.
+
+A boring substring has the following properties:
+
+Its length is 2.
+Both the characters are consecutive, for example - "ab", "cd", "dc", "zy" etc.(If the first character is C then the next character can be either (C+1) or (C-1)).
+Return 1 if it is possible to rearrange the letters of A such that there are no boring substrings in A else, return 0.*/
+    public boolean check (int a, int b){
+            if ( Math.abs(a - b)==1)
+                return false;
+            else
+                return true;
+    }
+    public int solve(String A) {
+        int minE= Integer.MAX_VALUE;int minO = Integer.MAX_VALUE; 
+        int maxE= Integer.MIN_VALUE; int maxO = Integer.MIN_VALUE;
+        for (int i=0; i<A.length(); i++){
+            int ascii = (int)A.charAt(i);
+
+            if (ascii%2==0){
+                //even += A.charAt(i); //throws TLE
+                minE = Math.min(ascii,minE);
+                maxE = Math.max(ascii,maxE);
+            }
+            else{
+                //odd += A.charAt(i);
+                minO = Math.min(ascii,minO);
+                maxO = Math.max(ascii,maxO);
+            }
+        }
+        //char oddArray[] = odd.toCharArray(); 
+        // Arrays.sort(oddArray);
+        // //odd = new String(oddArray);
+        //
+        // char evenArray[] = even.toCharArray();
+        // Arrays.sort(evenArray);
+        //even = new String(evenArray);
+        
+        if(check(maxO,minE))
+            return 1;
+        else if (check(maxE,minO))
+            return 1;
+        return 0;
+    }
+}
