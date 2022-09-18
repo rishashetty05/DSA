@@ -1,0 +1,147 @@
+//LEETCODE: Design your implementation of the linked list. You can choose to use the singly linked list or the doubly linked list. A node in a singly linked list should have two attributes:val andnext.valis the value of the current node, andnext is a pointer/reference to the next node. If you want to use the doubly linked list, you will need one more attributeprevto indicate the previous node in the linked list. Assume all nodes in the linked list are 0-indexed.
+
+// Implement these functions in your linked list class:
+
+// get(index) : Get the value of theindex-th node in the linked list. If the index is invalid, return-1.
+// addAtHead(val) : Add a node of value val before the first element of the linked list. After the insertion, the new node will be the first node of the linked list.
+// addAtTail(val) : Append a node of valuevalto the last element of the linked list.
+// addAtIndex(index, val) : Add a node of valueval before theindex-th node in the linked list. Ifindex equals to the length of linked list, the node will be appended to the end of linked list. If index is greater than the length, the node will not be inserted.
+// deleteAtIndex(index) : Delete theindex-th node in the linked list, if the index is valid.
+
+
+class MyLinkedList {
+    class Node {
+        int val;
+        Node next;
+        Node prev;
+        Node(int val){
+            this.val = val;
+            next=null;
+            prev=null;
+        }
+    }
+    int size;
+    private Node head;
+    private Node tail;
+    
+    public MyLinkedList() { // head is a node
+        size = 0;
+        head = new Node(-1);
+        tail = new Node(-1);
+        head.next = tail;
+        tail.prev = head;
+    }
+    
+    public int get(int index) {
+        if (index>=size || index<0)
+            return -1;
+        
+        Node temp = head;
+        for (int i =0; i<index && temp.next!=tail; i++){
+            temp=temp.next; // check thiss
+        }
+        
+        return temp.next.val; // This is considering 0 index
+//  Another way of writing the iteration  when head is not a node
+//           current = head;
+//             while (index-- >= 0)
+//             {
+//                 current = current.next;
+//             }
+//             return current.value; 
+      }
+    
+    public void addAtHead(int val) {
+        Node n =new Node(val);
+        n.next = head.next;
+        n.prev = head;
+        head.next = n;
+        n.next.prev = n; //making head of next list point to wards n as prev
+        size++;
+        // when head is not a node
+        // Node newNode = new Node(val);
+        // if (size == 0) {
+        //     head = newNode;
+        //     tail = head;
+        // } else {
+        //     newNode.next = head;
+        //     head = newNode;
+        // }
+        // size++;
+    }
+    
+    public void addAtTail(int val) {
+        Node n = new Node(val);
+        n.next = tail;
+        n.prev = tail.prev;
+        tail.prev = n;
+        n.prev.next = n;
+        size++;
+        
+    }
+    
+    public void addAtIndex(int index, int val) {
+        if (index > size || index<0) return;
+        int i = 0;
+        Node p = head;
+        for(; i < index && p.next != tail; i++) {
+            p = p.next;
+        }
+        size++;
+        
+         if(i != index)
+            return;
+        Node n = new Node(val);
+        n.prev = p;
+        n.next = p.next;
+        p.next = n;
+        n.next.prev = n;
+        // check if p.next.val
+        //Another way of implementing 
+        // Node newNode = new Node(val);
+        //     Node pre = head;
+        //     for (int i = 1; i < index; i++) pre = pre.next;
+        //     newNode.next = pre.next;
+        //     pre.next = newNode;
+        //     size++; OR 
+//          Link current = head;
+//             Link link = new Link(val);
+//             while (index-- > 0)
+//             {
+//                 current = current.next;
+//             }
+
+
+//             //-->
+//             link.next = current.next;
+//             current.next.prev = link;
+//             //<--
+//             current.next = link;
+//             link.prev = current;
+
+//             size++;
+    }
+    
+    public void deleteAtIndex(int index) {
+        int i = 0;
+        Node p = head;
+        for(; i < index && p.next != tail; i++) {
+            p = p.next;
+        }
+        if(p.next == tail)
+            return;
+
+        p.next = p.next.next;
+        p.next.prev = p;
+    }
+}
+
+/**
+ * Your MyLinkedList object will be instantiated and called as such:
+ * MyLinkedList obj = new MyLinkedList();
+ * int param_1 = obj.get(index);
+ * obj.addAtHead(val);
+ * obj.addAtTail(val);
+ * obj.addAtIndex(index,val);
+ * obj.deleteAtIndex(index);
+ */
